@@ -5,7 +5,7 @@ metadata:
   namespace: cert-manager
 spec:
   acme:
-    email: letsencrypt@genazt.me
+    email: letsencrypt@tarent.genazt.me
     disableAccountKeyGeneration: true
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
