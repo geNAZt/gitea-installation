@@ -6,7 +6,6 @@ metadata:
 spec:
   acme:
     email: letsencrypt@tarent.genazt.me
-    disableAccountKeyGeneration: true
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod
