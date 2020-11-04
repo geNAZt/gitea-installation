@@ -12,9 +12,9 @@ spec:
     name: gitea
     version: 2.0.2
   valuesFrom:
-    secretKeyRef:
-      name: gitea-database
-      namespace: gitea
+    - secretKeyRef:
+        name: gitea-database
+        namespace: gitea
   values:
     ingress:
       enabled: true
