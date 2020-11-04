@@ -14,6 +14,8 @@ spec:
     name: cert-manager
     version: v1.0.4
   values:
+    securityContext:
+      fsGroup: 65534
     installCRDs: true
     fullnameOverride: "cert-manager"
     extraArgs:
