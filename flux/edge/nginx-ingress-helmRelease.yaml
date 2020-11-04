@@ -16,4 +16,4 @@ spec:
     version: 0.7.0
   values:
     tcp:
-      22: "gitlab-server/gitlab-gitlab-shell:22"
+      22: "gitea/gitea-ssh:22"

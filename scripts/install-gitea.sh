@@ -26,11 +26,11 @@ stringData:
     gitea:
       config:
         database:
-          DB_TYPE: postgresql
+          DB_TYPE: postgres
           HOST: ${HOST}:${PORT}
           NAME: gitea
           USER: ${USERNAME}
-          PASSWD: ${PASSWORD}
+          PASSWD: "${PASSWORD}"
           SCHEMA: ${DB_NAME}
 kind: Secret
 metadata:
