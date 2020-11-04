@@ -1,0 +1,69 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: cert-manager
+  helmVersion: v3
+  chart:
+    repository: https://charts.jetstack.io
+    name: cert-manager
+    version: v1.0.4
+  values:
+    installCRDs: true
+    fullnameOverride: "cert-manager"
+    extraArgs:
+      - --max-concurrent-challenges=180
+    prometheus:
+      enabled: true
+    webhook:
+      enabled: false
+    ingressShim:
+      defaultIssuerName: letsencrypt-prod
+      defaultIssuerKind: ClusterIssuer
+    serviceAccount:
+      create: false
+      name: cert-manager
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 200m
+        memory: 300Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    cainjector:
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: cert-manager
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: cert-manager-cainjector
+  namespace: cert-manager
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: cainjector

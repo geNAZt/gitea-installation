@@ -1,0 +1,67 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: tarent-gittea
+  region: eu-central-1
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: cert-manager
+      # if no namespace is set, "default" will be used;
+      # the namespace will be created if it doesn't exist already
+      namespace: cert-manager
+      labels: {aws-usage: "application"}
+    attachPolicy: 
+      Version: "2012-10-17"
+      Statement:
+      - Effect: Allow
+        Action:
+        - "route53:ListHostedZones"
+        - "route53:ListResourceRecordSets"
+        Resource: '*'
+      - Effect: Allow
+        Action:
+        - "route53:ChangeResourceRecordSets"
+        Resource: 'arn:aws:route53:::hostedzone/Z07289401M00YI0PK9KUN'  
+  - metadata:
+      name: external-dns
+      # if no namespace is set, "default" will be used;
+      # the namespace will be created if it doesn't exist already
+      namespace: edge
+      labels: {aws-usage: "application"}
+    attachPolicy: 
+      Version: "2012-10-17"
+      Statement:
+      - Effect: Allow
+        Action:
+        - "route53:ListHostedZones"
+        - "route53:ListResourceRecordSets"
+        Resource: '*'
+      - Effect: Allow
+        Action:
+        - "route53:ChangeResourceRecordSets"
+        Resource: 'arn:aws:route53:::hostedzone/Z07289401M00YI0PK9KUN'
+
+nodeGroups:
+  - name: worker-1
+    instanceType: t3.small
+    desiredCapacity: 3
+    minSize: 3
+    maxSize: 6
+    ssh:
+      allow: true 
+
+git:
+  repo:
+    url: "git@github.com:geNAZt/gittea-installation.git"
+    branch: main
+    fluxPath: "flux/"
+    user: "GoMinty"
+    email: "fabian.fassbender.genazt@gmail.com"
+  operator:
+    namespace: "flux"
+    withHelm: true

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: external-dns-helm-values
+  namespace: edge
+data:
+  values.yaml: |
+    serviceAccount:
+      create: false
+      name: external-dns
