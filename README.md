@@ -20,10 +20,9 @@ Needed tooling
 ===
 CLI Tools:
 - aws
-- kubernetes
+- kubectl
 - bash
 - jq
-- psql
 
 Good to know
 ===
@@ -36,10 +35,13 @@ it inside its deployment. When the database has been created the script will get
 The installation will throw out a SSH public key after EKS installation. When a GITHUB_TOKEN has been set it will automatically try to add it to the profile. If not
 ensure that the SSH key will be added to the account pulling changes, otherwise the sync marker from flux will not persist and the cluster won't install stuff.
 
-You need to have a SSH key on your machine. The public part will be used to configure the worker nodes so one could access them if needed.
+You need to have a SSH key on your machine. This needs to be the default name `id_rsa`. The public part will be used to configure the worker nodes so one could access them if needed.
+That same SSH key needs to also have access to the git referenced in `cluster.yaml`. Not having that correctly setup will fail hard and may need manual deletion of already
+installed cloudformation stacks.
 
 How do i install it now?
 ===
 Select correct AWS profile
 Ensure that the Route53 hosted zone is setup
+Ensure that there is a id_pub which has access to the git configured in `cluster.yaml`
 Run `./install.sh`
