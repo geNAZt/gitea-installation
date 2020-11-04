@@ -1,2 +1,2 @@
-# gitea-installation
-Kubernetes installation of gitea on AWS EKS
+# gittea-installation
+Kubernetes installation of gittea on AWS EKS
