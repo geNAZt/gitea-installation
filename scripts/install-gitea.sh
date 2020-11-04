@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# We need this helper to get popstgres URI and username/password combo since the gitea chart needs it in its values, this will NOT be part of git since storing secrets in git is bad
+# We need this helper to get postgres URI and username/password combo since the gitea chart needs it in its values, this will NOT be part of git since storing secrets in git is bad
 SECRET_NAME=$(aws secretsmanager list-secrets --filters Key=tag-value,Values=${STACK_ID}  | jq .SecretList[].Name -r)
 
 #  "dbClusterIdentifier": "gitea-postgres-auroradbcluster-1geq0j1dxxrgb",
@@ -35,6 +35,7 @@ kubectl run \
 # We need to preapply the namespace
 kubectl apply -f ../flux/gitea/gitea-namespace.yaml
 
+# Create a temp file for the database parameters to apply
 cat <<EOF >> tmp.yaml
 apiVersion: v1
 stringData:
@@ -58,3 +59,6 @@ EOF
 
 kubectl apply -f tmp.yaml
 rm tmp.yaml
+
+# We need to remove a maybe failed helm release install attempt (which will fail because the secret was missing)
+kubectl delete helmrelease gitea -n gitea || :

@@ -22,6 +22,7 @@ iam:
         Action:
         - "route53:ListHostedZones"
         - "route53:ListResourceRecordSets"
+        - "route53:GetChange"
         Resource: '*'
       - Effect: Allow
         Action:
