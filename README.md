@@ -42,7 +42,7 @@ installed cloudformation stacks.
 
 How do i install it now?
 ===
-Select correct AWS profile
-Ensure that the Route53 hosted zone is setup
-Ensure that there is a id_pub which has access to the git configured in `cluster.yaml`
-Run `./install.sh`
+- Select correct AWS profile
+- Ensure that the Route53 hosted zone is setup
+- Ensure that there is a id_pub which has access to the git configured in `cluster.yaml`
+- Run `./install.sh`
