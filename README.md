@@ -19,6 +19,7 @@ The gitea instance also needs one config value. It needs the host under which it
 Needed tooling
 ===
 CLI Tools:
+- eksctl
 - aws
 - kubectl
 - bash
