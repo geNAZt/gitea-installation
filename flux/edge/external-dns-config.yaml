@@ -9,3 +9,5 @@ data:
     serviceAccount:
       create: false
       name: external-dns
+    zoneIdFilters:
+    - Z07289401M00YI0PK9KUN
