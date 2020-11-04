@@ -10,7 +10,7 @@ Configuration
 If needed the nodetype can be changed in cluster.yaml to anything supported by `eksctl`. Current default are t3.small which can be used with x86 based container images.
 
 To install you need to create a hosted zone with a valid domain first. The installation will attempt to generate lets encrypt certificates and routing entries in the given zone.
-The zone ID of that needs to be configured in the `cluster.yaml`. If thats not done all systems relying on DNS will get IAM errors.
+The zone ID of that needs to be configured in the `cluster.yaml`. If thats not done all systems relying on DNS will get IAM errors. The zone ID also needs to be changed in `flux/cert-manager/cert-manager-issuer.yaml` otherwise lets encrypt will not validate our certificate challenges
 
 The gitea instance also needs one config value. It needs the host under which it should be reachable. This can be configured in `flux/gitea/gitea-helmRelease.yaml`
 

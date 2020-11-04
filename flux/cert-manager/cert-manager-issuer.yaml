@@ -11,6 +11,10 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    - http01:
-        ingress:
-          class: nginx
+      - dns01:
+          route53:
+            hostedZoneID: Z07289401M00YI0PK9KUN
+            region: eu-central-1
+        selector:
+          dnsZones:
+            - "tarent.genazt.me"
