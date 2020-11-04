@@ -16,6 +16,22 @@ PORT=$(aws secretsmanager get-secret-value --secret-id ${SECRET_NAME} | jq .Secr
 HOST=$(aws secretsmanager get-secret-value --secret-id ${SECRET_NAME} | jq .SecretString -r | jq .host -r)
 DB_NAME=$(aws secretsmanager get-secret-value --secret-id ${SECRET_NAME} | jq .SecretString -r | jq .dbname -r)
 
+# Prepare database
+kubectl run \
+  postgres-client \
+  --image launcher.gcr.io/google/postgresql9 \
+  --rm --attach --restart=Never \
+  -it \
+  -- sh -c 'export PGPASSWORD='"'${PASSWORD}'"'; exec psql --host '"'${HOST}'"' --port '"'${PORT}'"' --username '"'${USERNAME}'"' --command="CREATE DATABASE gitea WITH OWNER gitea TEMPLATE template0 ENCODING UTF8 LC_COLLATE '"'"'en_US.UTF-8'"'"' LC_CTYPE '"'"'en_US.UTF-8;'"'"'"'
+
+# and schema, i guess the documentation on gitea is a bit wrong
+kubectl run \
+  postgres-client \
+  --image launcher.gcr.io/google/postgresql9 \
+  --rm --attach --restart=Never \
+  -it \
+  -- sh -c 'export PGPASSWORD='"'${PASSWORD}'"'; exec psql --host '"'${HOST}'"' --port '"'${PORT}'"' --username '"'${USERNAME}'"' --command="CREATE SCHEMA gitea AUTHORIZATION gitea"'
+
 # We need to preapply the namespace
 kubectl apply -f ../flux/gitea/gitea-namespace.yaml
 
@@ -32,6 +48,7 @@ stringData:
           USER: ${USERNAME}
           PASSWD: "${PASSWORD}"
           SCHEMA: ${DB_NAME}
+          SSL_MODE: require
 kind: Secret
 metadata:
   name: gitea-database

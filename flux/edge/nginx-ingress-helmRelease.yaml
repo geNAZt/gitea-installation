@@ -11,9 +11,9 @@ spec:
   releaseName: nginx-ingress
   helmVersion: v3
   chart:
-    repository: https://helm.nginx.com/stable
-    name: nginx-ingress
-    version: 0.7.0
+    repository: https://kubernetes.github.io/ingress-nginx
+    name: ingress-nginx
+    version: 3.8.0
   values:
     tcp:
       22: "gitea/gitea-ssh:22"

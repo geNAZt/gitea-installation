@@ -21,6 +21,7 @@ CLI Tools:
 - kubernetes
 - bash
 - jq
+- psql
 
 Good to know
 ===
