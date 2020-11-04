@@ -10,4 +10,9 @@ echo "[postgres] Detected private subnets: ${PRIVATE_SUBNETS}"
 
 # Get notification email
 EMAIL="fabian.fassbender42@gmail.com"
-aws cloudformation create-stack --stack-name gitea-postgres --template-body file://../stacks/postgres.yaml --parameters 'ParameterKey=Subnets,ParameterValue="'"${PRIVATE_SUBNETS}"'"' ParameterKey=AllowedCidr,ParameterValue=${CIDR} ParameterKey=DBName,ParameterValue=gitea ParameterKey=VPC,ParameterValue=${VPC_ID} ParameterKey=DBUsername,ParameterValue=gitea ParameterKey=NotificationList,ParameterValue=${EMAIL}
+STACK_ID=$(aws cloudformation create-stack --stack-name gitea-postgres --template-body file://../stacks/postgres.yaml --parameters 'ParameterKey=Subnets,ParameterValue="'"${PRIVATE_SUBNETS}"'"' ParameterKey=AllowedCidr,ParameterValue=${CIDR} ParameterKey=DBName,ParameterValue=gitea ParameterKey=VPC,ParameterValue=${VPC_ID} ParameterKey=DBUsername,ParameterValue=gitea ParameterKey=NotificationList,ParameterValue=${EMAIL} | jq -r .StackId)
+
+# Wait until stack has been fully created
+aws cloudformation wait stack-create-complete --stack-name ${STACK_ID}
+
+export STACK_ID

@@ -1,0 +1,34 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: gitea
+  namespace: gitea
+spec:
+  releaseName: gitea
+  helmVersion: v3
+  chart:
+    repository: https://dl.gitea.io/charts/
+    name: gitea
+    version: 2.0.2
+  valuesFrom:
+    secretKeyRef:
+      name: gitea-database
+      namespace: gitea
+  values:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+      - git.tarent.genazt.me
+      tls:
+      - secretName: gitea-tls
+        hosts: 
+        - git.tarent.genazt.me  
+    gitea:
+      database:
+        builtIn:
+          postgresql:
+            enabled: false
