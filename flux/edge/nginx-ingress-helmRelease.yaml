@@ -15,5 +15,12 @@ spec:
     name: ingress-nginx
     version: 3.8.0
   values:
+    controller:
+      metrics:
+        enabled: true
+        service:
+          annotations:
+            prometheus.io/port: "10254"
+            prometheus.io/scrape: "true"
     tcp:
       22: "gitea/gitea-ssh:22"

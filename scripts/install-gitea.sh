@@ -42,6 +42,8 @@ stringData:
   values.yaml: |
     gitea:
       config:
+        metrics:
+          ENABLED: "true"
         database:
           DB_TYPE: postgres
           HOST: ${HOST}:${PORT}
