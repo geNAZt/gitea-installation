@@ -557,6 +557,11 @@ spec:
         - name: fluentd-cloudwatch
           image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
           env:
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: cluster-info
+                  key: logs_region
             - name: REGION
               valueFrom:
                 configMapKeyRef:
