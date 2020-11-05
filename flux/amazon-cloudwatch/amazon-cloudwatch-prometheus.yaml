@@ -16,7 +16,7 @@ data:
                   "label_matcher": ".*gitea.*",
                   "dimensions": [["Service","Namespace","ClusterName"]],
                   "metric_selectors": [
-                    "^gitea_accesses$"
+                    "^gitea_accesses$",
                     "^promhttp_metric_handler_requests_total$"
                   ]
                 },
