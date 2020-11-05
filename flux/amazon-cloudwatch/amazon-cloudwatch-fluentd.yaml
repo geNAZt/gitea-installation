@@ -167,8 +167,8 @@ spec:
 # need to replace the placeholders {{cluster_name}} and {{region_name}}
 apiVersion: v1
 data:
-  cluster.name: tarent-gittea
-  logs.region: eu-central-1
+  cluster_name: tarent-gittea
+  logs_region: eu-central-1
 kind: ConfigMap
 metadata:
   name: cluster-info
@@ -561,12 +561,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: cluster-info
-                  key: logs.region
+                  key: logs_region
             - name: CLUSTER_NAME
               valueFrom:
                 configMapKeyRef:
                   name: cluster-info
-                  key: cluster.name
+                  key: cluster_name
             - name: CI_VERSION
               value: "k8s/1.2.3"
           resources:

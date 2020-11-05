@@ -10,6 +10,14 @@ iam:
   withOIDC: true
   serviceAccounts:
   - metadata:
+      name: fluentd
+      # if no namespace is set, "default" will be used;
+      # the namespace will be created if it doesn't exist already
+      namespace: amazon-cloudwatch
+      labels: {aws-usage: "application"}
+    attachPolicyARNs:
+    - "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  - metadata:
       name: cloudwatch-agent
       # if no namespace is set, "default" will be used;
       # the namespace will be created if it doesn't exist already
