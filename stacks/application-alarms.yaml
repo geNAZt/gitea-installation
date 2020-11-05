@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation Template to create Aurora Postgresql Cluster DB Instance
+Parameters:
+  NotificationList:
+    Type: String
+    Description: >-
+      The Email notification list is used to configure a SNS topic for sending
+      cloudwatch alarm and RDS Event notifications
+    AllowedPattern: >-
+      ^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$
+    ConstraintDescription: provide a valid email address.
+Resources:
+  ApplicationSNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - Endpoint: !Ref NotificationList
+          Protocol: email
+  Ingress5xxAlarm:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties: 
+      ActionsEnabled: true
+      AlarmActions:
+      - Ref: ApplicationSNSTopic
+      AlarmDescription: '5xx_Count'
+      Dimensions:
+      - Name: ClusterName
+        Value: tarent-gittea
+      - Name: Namespace
+        Value: edge
+      - Name: Service
+        Value: nginx-ingress-ingress-nginx-controller-metrics
+      - Name: status
+        Value: 503
+      MetricName: nginx_ingress_controller_requests
+      Statistic: Maximum
+      Namespace: 'ContainerInsights/Prometheus'
+      Threshold: '5'
+      ComparisonOperator: 'GreaterThanOrEqualToThreshold'
+      Period: '60'
+      EvaluationPeriods: '5'
+      TreatMissingData: 'notBreaching'
+  GiteaRestartAlarm:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties: 
+      ActionsEnabled: true
+      AlarmActions:
+      - Ref: ApplicationSNSTopic
+      AlarmDescription: 'Gitea_Restart'
+      Dimensions:
+      - Name: ClusterName
+        Value: tarent-gittea
+      - Name: Namespace
+        Value: gitea
+      - Name: PodName
+        Value: gitea-0
+      MetricName: pod_number_of_container_restarts
+      Statistic: Maximum
+      Namespace: 'ContainerInsights'
+      Threshold: '2'
+      ComparisonOperator: 'GreaterThanOrEqualToThreshold'
+      Period: '60'
+      EvaluationPeriods: '5'
+      TreatMissingData: 'notBreaching'

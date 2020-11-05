@@ -40,6 +40,22 @@ You need to have a SSH key on your machine. This needs to be the default name `i
 That same SSH key needs to also have access to the git referenced in `cluster.yaml`. Not having that correctly setup will fail hard and may need manual deletion of already
 installed cloudformation stacks.
 
+Monitoring, Logs and Alarms
+===
+This application comes with CloudWatch monitoring and logging. Additional to that CloudWatch alarms will be configured to use SNS to send emails to a subscription group.
+
+Current Alarms:
+- Gitea is stuck in a crashloop
+- Nginx detects that no gitea is there (503)
+- Postgres has high cpu > 80%
+- Postgres has low storage
+- Postgres has failed over (if in prod mode)
+
+To get alarm notifications working:
+- You get two emails (can be in spam) with confirmation links after installation finished
+- Click on both confirmation links
+- Now you get emails when alarms trigger
+
 How do i install it now?
 ===
 - Select correct AWS profile

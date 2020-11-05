@@ -9,7 +9,7 @@ echo "[postgres] Detected CIDR: ${CIDR}"
 echo "[postgres] Detected private subnets: ${PRIVATE_SUBNETS}"
 
 # Get notification email
-EMAIL="fabian.fassbender42@gmail.com"
+EMAIL=$1
 STACK_ID=$(aws cloudformation create-stack --stack-name gitea-postgres --template-body file://../stacks/postgres.yaml --parameters 'ParameterKey=Subnets,ParameterValue="'"${PRIVATE_SUBNETS}"'"' ParameterKey=AllowedCidr,ParameterValue=${CIDR} ParameterKey=DBName,ParameterValue=gitea ParameterKey=VPC,ParameterValue=${VPC_ID} ParameterKey=DBUsername,ParameterValue=gitea ParameterKey=NotificationList,ParameterValue=${EMAIL} | jq -r .StackId)
 
 echo "[postgres] Started deployment of stack: ${STACK_ID}"

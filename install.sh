@@ -8,6 +8,7 @@ read notification_email
 
 cd scripts/
 source install-eks.sh
-source install-postgres.sh
+source install-postgres.sh notification_email
 source install-gitea.sh
+source install-application-alarms.sh notification_email
 cd ..
